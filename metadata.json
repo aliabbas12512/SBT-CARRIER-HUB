@@ -1,0 +1,6 @@
+{
+  "name": "Today Job KSA",
+  "description": "Saudi Arabia Job Listing Website with search, filters, one-click WhatsApp/Email/Call job applications, job seeker authentication, and admin portal with Excel bulk job upload.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

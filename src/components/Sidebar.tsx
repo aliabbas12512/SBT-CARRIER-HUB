@@ -1,6 +1,7 @@
 import React from 'react';
 import { Home, Briefcase, User, ShieldCheck, HelpCircle, X, MapPin, Building2, ExternalLink } from 'lucide-react';
 import { UserProfile } from '../types';
+import { AdBanner } from './AdBanner';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -166,6 +167,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <HelpCircle className="w-4 h-4 text-slate-400" />
             <span>Setup & Deploy SQL</span>
           </button>
+
+          {/* Adsterra Sidebar Banner Slot */}
+          <div className="pt-2 flex justify-center">
+            <AdBanner />
+          </div>
         </div>
 
         {/* Sidebar Footer Info Card */}

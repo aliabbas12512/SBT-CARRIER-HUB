@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, MapPin, Briefcase, Calendar, DollarSign, Phone, Mail, MessageSquare, Share2, CheckCircle2, Building2, Copy, Check } from 'lucide-react';
 import { Job } from '../types';
+import { AdBanner } from './AdBanner';
 
 interface JobDetailModalProps {
   job: Job | null;
@@ -139,6 +140,11 @@ export const JobDetailModal: React.FC<JobDetailModalProps> = ({ job, onClose }) 
                 <span className="font-mono text-slate-200">{job.phone || 'Available below'}</span>
               </div>
             </div>
+          </div>
+
+          {/* Adsterra Job Detail Ad Banner (300x250) - Clear visual separation */}
+          <div className="pt-2 border-t border-slate-800/80 flex flex-col items-center justify-center">
+            <AdBanner />
           </div>
         </div>
 

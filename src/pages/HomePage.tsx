@@ -3,6 +3,7 @@ import { ArrowRight, Briefcase, MapPin, MessageSquare, Zap, ShieldCheck, CheckCi
 import { Job, FilterState } from '../types';
 import { JobCard } from '../components/JobCard';
 import { JobFilters } from '../components/JobFilters';
+import { AdNative } from '../components/AdNative';
 
 interface HomePageProps {
   jobs: Job[];
@@ -90,6 +91,9 @@ export const HomePage: React.FC<HomePageProps> = ({
           onFilterChange={onFilterChange}
           totalResultsCount={filteredJobs.length}
         />
+
+        {/* Adsterra Native Banner Slot: ad-slot-home-top */}
+        <AdNative id="container-45f9ec742643229727e4e14a7092ea0f-top" />
       </section>
 
       {/* LATEST JOBS SECTION (SHOWING UP TO 6 CARDS) */}
@@ -122,8 +126,15 @@ export const HomePage: React.FC<HomePageProps> = ({
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {latestJobs.map((job) => (
-              <JobCard key={job.id} job={job} onApply={onApplyJob} />
+            {latestJobs.map((job, index) => (
+              <React.Fragment key={job.id}>
+                <JobCard job={job} onApply={onApplyJob} />
+                {(index + 1) % 5 === 0 && (
+                  <div className="col-span-1 md:col-span-2 lg:col-span-3 my-2">
+                    <AdNative id={`container-45f9ec742643229727e4e14a7092ea0f-home-${index + 1}`} />
+                  </div>
+                )}
+              </React.Fragment>
             ))}
           </div>
         )}

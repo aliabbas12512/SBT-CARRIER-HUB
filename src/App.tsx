@@ -144,7 +144,7 @@ export default function App() {
             <span>وظائف اليوم في المملكة العربية السعودية</span>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
             <button
               onClick={() => setCurrentPage('home')}
               className="hover:text-slate-300 transition-colors"
@@ -169,6 +169,17 @@ export default function App() {
             >
               Deploy Guide
             </button>
+
+            {/* Adsterra Sponsored Smartlink */}
+            <a
+              href="https://undergocutlery.com/uq0rdybrzk?key=5407ee932adeba1d701c13ca70f8c584"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-amber-400 hover:text-amber-300 transition-colors font-semibold px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20"
+              title="Sponsored Content"
+            >
+              Sponsored
+            </a>
           </div>
 
           <p>© {new Date().getFullYear()} Today Job KSA. All rights reserved.</p>

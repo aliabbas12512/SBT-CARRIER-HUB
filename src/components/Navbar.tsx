@@ -32,18 +32,18 @@ export const Navbar: React.FC<NavbarProps> = ({
             <Menu className="w-6 h-6" />
           </button>
 
-          <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 via-emerald-500 to-amber-400 p-0.5 shadow-md group-hover:scale-105 transition-transform">
+          <a href="#" className="flex items-center space-x-2 sm:space-x-3 rtl:space-x-reverse group">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-emerald-600 via-emerald-500 to-amber-400 p-0.5 shadow-md group-hover:scale-105 transition-transform shrink-0">
               <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-                <Briefcase className="w-5 h-5 text-amber-400" />
+                <Briefcase className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
               </div>
             </div>
             <div>
               <div className="flex items-center space-x-1.5 rtl:space-x-reverse">
-                <span className="font-bold text-lg tracking-tight bg-gradient-to-r from-white via-slate-100 to-amber-200 bg-clip-text text-transparent">
+                <span className="font-bold text-base sm:text-lg tracking-tight bg-gradient-to-r from-white via-slate-100 to-amber-200 bg-clip-text text-transparent whitespace-nowrap">
                   Today Job KSA
                 </span>
-                <span className="bg-amber-500/20 text-amber-300 text-[10px] font-semibold px-1.5 py-0.5 rounded border border-amber-500/30">
+                <span className="hidden sm:inline-block bg-amber-500/20 text-amber-300 text-[10px] font-semibold px-1.5 py-0.5 rounded border border-amber-500/30">
                   KSA
                 </span>
               </div>
@@ -56,24 +56,23 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Right Section: Deploy Guide, Admin Shortcut, Seeker Auth */}
         <div className="flex items-center space-x-2 sm:space-x-3 rtl:space-x-reverse">
-          {/* Vercel & Supabase Deploy Guide */}
+          {/* Vercel & Supabase Deploy Guide - Hidden on Mobile */}
           <button
             onClick={onOpenDeployGuide}
-            className="hidden sm:flex items-center space-x-1.5 rtl:space-x-reverse px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 transition-colors"
+            className="hidden md:flex items-center space-x-1.5 rtl:space-x-reverse px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 transition-colors"
             title="View Vercel & Supabase Deployment Instructions"
           >
             <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
             <span>Deploy Guide</span>
           </button>
 
-          {/* Admin shortcut */}
+          {/* Admin shortcut - Hidden on Mobile, accessible via side drawer */}
           <button
             onClick={onOpenAdmin}
-            className="flex items-center space-x-1.5 rtl:space-x-reverse px-3 py-1.5 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 text-xs font-medium border border-emerald-700/50 transition-colors"
+            className="hidden md:flex items-center space-x-1.5 rtl:space-x-reverse px-3 py-1.5 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 text-xs font-medium border border-emerald-700/50 transition-colors"
           >
             <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-            <span className="hidden sm:inline">Admin Portal</span>
-            <span className="sm:hidden">Admin</span>
+            <span>Admin Portal</span>
           </button>
 
           {/* Seeker Auth Status */}

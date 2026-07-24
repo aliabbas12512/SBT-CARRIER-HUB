@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Briefcase, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Briefcase, RotateCcw, Loader2, CheckCircle2 } from 'lucide-react';
 import { Job, FilterState } from '../types';
 import { JobCard } from '../components/JobCard';
 import { JobFilters } from '../components/JobFilters';
+import { AdNative } from '../components/AdNative';
 
 interface AllJobsPageProps {
   jobs: Job[];
@@ -17,10 +18,12 @@ export const AllJobsPage: React.FC<AllJobsPageProps> = ({
   onFilterChange,
   onApplyJob,
 }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 12;
+  const BATCH_SIZE = 12;
+  const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const observerTargetRef = useRef<HTMLDivElement>(null);
 
-  // Filter jobs
+  // Filter jobs based on active search criteria
   const filteredJobs = jobs.filter((job) => {
     const matchesSearch =
       !filters.searchQuery ||
@@ -34,15 +37,39 @@ export const AllJobsPage: React.FC<AllJobsPageProps> = ({
     return matchesSearch && matchesCategory && matchesLocation;
   });
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredJobs.length / ITEMS_PER_PAGE) || 1;
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const paginatedJobs = filteredJobs.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  // Reset visibleCount back to initial BATCH_SIZE when filters change
+  useEffect(() => {
+    setVisibleCount(BATCH_SIZE);
+  }, [filters.searchQuery, filters.category, filters.location]);
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  // Currently loaded visible slice of jobs
+  const visibleJobs = filteredJobs.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredJobs.length;
+
+  // IntersectionObserver for Infinite Scroll
+  useEffect(() => {
+    const target = observerTargetRef.current;
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !isLoadingMore) {
+          setIsLoadingMore(true);
+          setTimeout(() => {
+            setVisibleCount((prev) => Math.min(prev + BATCH_SIZE, filteredJobs.length));
+            setIsLoadingMore(false);
+          }, 300);
+        }
+      },
+      { rootMargin: '250px' }
+    );
+
+    observer.observe(target);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasMore, isLoadingMore, filteredJobs.length]);
 
   return (
     <div className="space-y-8 pb-12">
@@ -56,7 +83,7 @@ export const AllJobsPage: React.FC<AllJobsPageProps> = ({
           All Available Jobs in Saudi Arabia
         </h1>
         <p className="text-xs text-slate-400 mt-1">
-          Browsing {filteredJobs.length} active listings across Riyadh, Jeddah, Dammam & all regions.
+          Showing {visibleJobs.length} of {filteredJobs.length} active listings across Riyadh, Jeddah, Dammam & all regions.
         </p>
       </div>
 
@@ -65,13 +92,13 @@ export const AllJobsPage: React.FC<AllJobsPageProps> = ({
         filters={filters}
         onFilterChange={(f) => {
           onFilterChange(f);
-          setCurrentPage(1); // Reset to page 1 on filter change
+          setVisibleCount(BATCH_SIZE);
         }}
         totalResultsCount={filteredJobs.length}
       />
 
       {/* Jobs Grid */}
-      {paginatedJobs.length === 0 ? (
+      {filteredJobs.length === 0 ? (
         <div className="p-12 rounded-2xl bg-slate-900 border border-slate-800 text-center space-y-3">
           <p className="text-lg font-bold text-slate-300">No job listings found.</p>
           <p className="text-xs text-slate-500 max-w-md mx-auto">
@@ -80,7 +107,7 @@ export const AllJobsPage: React.FC<AllJobsPageProps> = ({
           <button
             onClick={() => {
               onFilterChange({ searchQuery: '', category: '', location: '' });
-              setCurrentPage(1);
+              setVisibleCount(BATCH_SIZE);
             }}
             className="inline-flex items-center space-x-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition-colors shadow-md"
           >
@@ -90,54 +117,37 @@ export const AllJobsPage: React.FC<AllJobsPageProps> = ({
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {paginatedJobs.map((job) => (
-            <JobCard key={job.id} job={job} onApply={onApplyJob} />
+          {visibleJobs.map((job, index) => (
+            <React.Fragment key={job.id}>
+              <JobCard job={job} onApply={onApplyJob} />
+              {(index + 1) % 5 === 0 && (
+                <div className="col-span-1 md:col-span-2 lg:col-span-3 my-2">
+                  <AdNative id={`container-45f9ec742643229727e4e14a7092ea0f-infinite-${index + 1}`} />
+                </div>
+              )}
+            </React.Fragment>
           ))}
         </div>
       )}
 
-      {/* Pagination Controls */}
-      {totalPages > 1 && (
-        <div className="pt-6 border-t border-slate-800 flex flex-wrap items-center justify-between gap-4">
-          <p className="text-xs text-slate-400">
-            Showing <span className="font-bold text-emerald-400">{startIndex + 1}</span> to{' '}
-            <span className="font-bold text-emerald-400">
-              {Math.min(startIndex + ITEMS_PER_PAGE, filteredJobs.length)}
-            </span>{' '}
-            of <span className="font-bold text-slate-200">{filteredJobs.length}</span> jobs
-          </p>
-
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
-              <button
-                key={pageNum}
-                onClick={() => handlePageChange(pageNum)}
-                className={`w-9 h-9 rounded-xl text-xs font-bold transition-all ${
-                  currentPage === pageNum
-                    ? 'bg-emerald-600 text-white shadow-md shadow-emerald-950/30'
-                    : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                {pageNum}
-              </button>
-            ))}
-
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
+      {/* Infinite Scroll Sentinel & Loader / Completion Indicator */}
+      {filteredJobs.length > 0 && (
+        <div className="pt-6 border-t border-slate-800/80 flex flex-col items-center justify-center">
+          {hasMore ? (
+            <div ref={observerTargetRef} className="py-6 flex flex-col items-center justify-center space-y-2">
+              <Loader2 className="w-6 h-6 text-emerald-400 animate-spin" />
+              <p className="text-xs text-slate-400 font-medium">Loading more jobs ({visibleJobs.length} / {filteredJobs.length})...</p>
+            </div>
+          ) : (
+            <div className="py-6 text-center">
+              <div className="inline-flex items-center space-x-2 text-xs font-medium text-slate-300 bg-slate-900 border border-slate-800 px-5 py-2.5 rounded-xl shadow-inner">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                <span>
+                  You've reached the end — <strong className="text-emerald-400">{filteredJobs.length}</strong> of <strong className="text-emerald-400">{filteredJobs.length}</strong> jobs shown
+                </span>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

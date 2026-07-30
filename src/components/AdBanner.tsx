@@ -27,6 +27,9 @@ export const AdBanner: React.FC = () => {
     invokeScript.type = 'text/javascript';
     invokeScript.src = 'https://undergocutlery.com/a5345d41bd616c9f96576f9fa59261c3/invoke.js';
     invokeScript.async = true;
+    invokeScript.onerror = (e) => {
+      console.warn('Adsterra banner script failed to load or was blocked:', e);
+    };
 
     const container = bannerRef.current;
     container.appendChild(confScript);

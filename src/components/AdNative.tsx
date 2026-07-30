@@ -27,6 +27,9 @@ export const AdNative: React.FC<AdNativeProps> = ({
     script.async = true;
     script.setAttribute('data-cfasync', 'false');
     script.src = 'https://undergocutlery.com/45f9ec742643229727e4e14a7092ea0f/invoke.js';
+    script.onerror = (e) => {
+      console.warn('Adsterra native script failed to load or was blocked:', e);
+    };
 
     currentContainer.appendChild(script);
 

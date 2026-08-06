@@ -8,7 +8,6 @@ import { AllJobsPage } from './pages/AllJobsPage';
 import { AdminPortal } from './components/AdminPortal';
 import { JobDetailModal } from './components/JobDetailModal';
 import { AuthModal } from './components/AuthModal';
-import { DeployInstructionsModal } from './components/DeployInstructionsModal';
 
 export default function App() {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -30,7 +29,6 @@ export default function App() {
   // Layout UI states
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [isDeployGuideOpen, setIsDeployGuideOpen] = useState(false);
 
   // Current Seeker User state
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
@@ -75,8 +73,6 @@ export default function App() {
         currentUser={currentUser}
         onOpenAuth={() => setIsAuthModalOpen(true)}
         onSignOut={handleSignOut}
-        onOpenAdmin={() => setCurrentPage('admin')}
-        onOpenDeployGuide={() => setIsDeployGuideOpen(true)}
       />
 
       {/* Main Body Container with Left Sidebar */}
@@ -89,7 +85,6 @@ export default function App() {
           onNavigate={(page) => setCurrentPage(page)}
           currentUser={currentUser}
           onOpenAuth={() => setIsAuthModalOpen(true)}
-          onOpenDeployGuide={() => setIsDeployGuideOpen(true)}
           totalJobsCount={jobs.length}
         />
 
@@ -130,11 +125,6 @@ export default function App() {
         onSuccess={(user) => setCurrentUser(user)}
       />
 
-      <DeployInstructionsModal
-        isOpen={isDeployGuideOpen}
-        onClose={() => setIsDeployGuideOpen(false)}
-      />
-
       {/* Footer */}
       <footer className="border-t border-slate-900 bg-slate-950 py-8 text-xs text-slate-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -157,29 +147,6 @@ export default function App() {
             >
               All Jobs
             </button>
-            <button
-              onClick={() => setCurrentPage('admin')}
-              className="hover:text-amber-400 transition-colors"
-            >
-              Admin Portal
-            </button>
-            <button
-              onClick={() => setIsDeployGuideOpen(true)}
-              className="hover:text-emerald-400 transition-colors"
-            >
-              Deploy Guide
-            </button>
-
-            {/* Adsterra Sponsored Smartlink */}
-            <a
-              href="https://undergocutlery.com/uq0rdybrzk?key=5407ee932adeba1d701c13ca70f8c584"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-amber-400 hover:text-amber-300 transition-colors font-semibold px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20"
-              title="Sponsored Content"
-            >
-              Sponsored
-            </a>
           </div>
 
           <p>© {new Date().getFullYear()} Today Job KSA. All rights reserved.</p>

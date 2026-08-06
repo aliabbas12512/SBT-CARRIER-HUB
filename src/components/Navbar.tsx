@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Briefcase, User, LogOut, ShieldCheck, HelpCircle } from 'lucide-react';
+import { Menu, Briefcase, User, LogOut } from 'lucide-react';
 import { UserProfile } from '../types';
 
 interface NavbarProps {
@@ -7,8 +7,6 @@ interface NavbarProps {
   currentUser: UserProfile | null;
   onOpenAuth: () => void;
   onSignOut: () => void;
-  onOpenAdmin: () => void;
-  onOpenDeployGuide: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -16,8 +14,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   currentUser,
   onOpenAuth,
   onSignOut,
-  onOpenAdmin,
-  onOpenDeployGuide,
 }) => {
   return (
     <header className="sticky top-0 z-30 bg-slate-900/95 backdrop-blur-md border-b border-emerald-900/40 text-white shadow-lg">
@@ -54,27 +50,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           </a>
         </div>
 
-        {/* Right Section: Deploy Guide, Admin Shortcut, Seeker Auth */}
+        {/* Right Section: Seeker Auth */}
         <div className="flex items-center space-x-2 sm:space-x-3 rtl:space-x-reverse">
-          {/* Vercel & Supabase Deploy Guide - Hidden on Mobile */}
-          <button
-            onClick={onOpenDeployGuide}
-            className="hidden md:flex items-center space-x-1.5 rtl:space-x-reverse px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 transition-colors"
-            title="View Vercel & Supabase Deployment Instructions"
-          >
-            <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
-            <span>Deploy Guide</span>
-          </button>
-
-          {/* Admin shortcut - Hidden on Mobile, accessible via side drawer */}
-          <button
-            onClick={onOpenAdmin}
-            className="hidden md:flex items-center space-x-1.5 rtl:space-x-reverse px-3 py-1.5 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 text-xs font-medium border border-emerald-700/50 transition-colors"
-          >
-            <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-            <span>Admin Portal</span>
-          </button>
-
           {/* Seeker Auth Status */}
           {currentUser ? (
             <div className="flex items-center space-x-2 rtl:space-x-reverse pl-2 border-l border-slate-800">

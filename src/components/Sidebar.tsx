@@ -1,7 +1,6 @@
 import React from 'react';
-import { Home, Briefcase, User, ShieldCheck, HelpCircle, X, MapPin, Building2, ExternalLink } from 'lucide-react';
+import { Home, Briefcase, User, MapPin, X } from 'lucide-react';
 import { UserProfile } from '../types';
-import { AdBanner } from './AdBanner';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -10,7 +9,6 @@ interface SidebarProps {
   onNavigate: (page: 'home' | 'jobs' | 'admin') => void;
   currentUser: UserProfile | null;
   onOpenAuth: () => void;
-  onOpenDeployGuide: () => void;
   totalJobsCount: number;
 }
 
@@ -21,7 +19,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onNavigate,
   currentUser,
   onOpenAuth,
-  onOpenDeployGuide,
   totalJobsCount,
 }) => {
   const navItems = [
@@ -132,46 +129,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <span>{currentUser ? 'My Profile' : 'Sign In / Sign Up'}</span>
           </button>
 
-          {/* Admin Link */}
-          <div className="pt-4 pb-2 px-3 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-            Administration
-          </div>
-
-          <button
-            onClick={() => {
-              onNavigate('admin');
-              onClose();
-            }}
-            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-              currentPage === 'admin'
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                : 'text-slate-300 hover:bg-slate-800 hover:text-amber-300'
-            }`}
-          >
-            <div className="flex items-center space-x-3 rtl:space-x-reverse">
-              <ShieldCheck className="w-4 h-4 text-amber-400" />
-              <span>Admin Portal</span>
-            </div>
-            <span className="text-[10px] bg-amber-500/10 text-amber-400 px-1.5 py-0.5 rounded border border-amber-500/30">
-              Admin
-            </span>
-          </button>
-
-          <button
-            onClick={() => {
-              onOpenDeployGuide();
-              onClose();
-            }}
-            className="w-full flex items-center space-x-3 rtl:space-x-reverse px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-colors"
-          >
-            <HelpCircle className="w-4 h-4 text-slate-400" />
-            <span>Setup & Deploy SQL</span>
-          </button>
-
-          {/* Adsterra Sidebar Banner Slot */}
-          <div className="pt-2 flex justify-center">
-            <AdBanner />
-          </div>
         </div>
 
         {/* Sidebar Footer Info Card */}
